@@ -1,5 +1,8 @@
+```tsx
 import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 import './globals.css';
+
 import { Providers } from '@/components/Providers';
 import { SiteSettingsProvider } from '@/components/SiteSettingsProvider';
 import { Header } from '@/components/Header';
@@ -35,32 +38,65 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Skip the loader on repeat visits within a session, before first paint */}
-        <script dangerouslySetInnerHTML={{ __html: "try{if(sessionStorage.getItem('bymsy.loaded')==='1')document.documentElement.setAttribute('data-seen','1')}catch(e){}" }} />
+        {/* Skip the loader on repeat visits within a session */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(sessionStorage.getItem('bymsy.loaded')==='1')document.documentElement.setAttribute('data-seen','1')}catch(e){}",
+          }}
+        />
+
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin=""
+        />
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=DM+Serif+Display&family=Instrument+Sans:wght@400;500;600&display=swap"
         />
       </head>
+
       <body>
         <SiteSettingsProvider>
-        <Providers>
-          <Preloader />
-          <SmoothScroll />
-          <Header />
-          <main id="main">{children}</main>
-          <Footer />
-          <PromoPopup />
-          <MobileBar />
-        </Providers>
+          <Providers>
+            <Preloader />
+            <SmoothScroll />
+            <Header />
+
+            <main id="main">{children}</main>
+
+            <Footer />
+            <PromoPopup />
+            <MobileBar />
+          </Providers>
         </SiteSettingsProvider>
+
+        {/* Google Analytics 4 */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-NYHYEG8SN3"
+          strategy="afterInteractive"
+        />
+
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){window.dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-NYHYEG8SN3');
+          `}
+        </Script>
       </body>
     </html>
   );
 }
+```
