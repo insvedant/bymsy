@@ -1,6 +1,7 @@
-```tsx
+
 import type { Metadata, Viewport } from 'next';
-import Script from 'next/script';
+import type { ReactNode } from 'react';
+
 import './globals.css';
 
 import { Providers } from '@/components/Providers';
@@ -11,6 +12,8 @@ import { PromoPopup } from '@/components/PromoPopup';
 import { Preloader } from '@/components/Preloader';
 import { MobileBar } from '@/components/MobileBar';
 import { SmoothScroll } from '@/components/SmoothScroll';
+import { GoogleAnalytics } from '@/components/GoogleAnalytics';
+
 import { SITE } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -41,12 +44,11 @@ export const viewport: Viewport = {
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Skip the loader on repeat visits within a session */}
         <script
           dangerouslySetInnerHTML={{
             __html:
@@ -54,12 +56,17 @@ export default function RootLayout({
           }}
         />
 
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.googleapis.com"
+        />
+
         <link
           rel="preconnect"
           href="https://fonts.gstatic.com"
           crossOrigin=""
         />
+
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=DM+Serif+Display&family=Instrument+Sans:wght@400;500;600&display=swap"
@@ -81,22 +88,8 @@ export default function RootLayout({
           </Providers>
         </SiteSettingsProvider>
 
-        {/* Google Analytics 4 */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-NYHYEG8SN3"
-          strategy="afterInteractive"
-        />
-
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){window.dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-NYHYEG8SN3');
-          `}
-        </Script>
+        <GoogleAnalytics />
       </body>
     </html>
   );
 }
-```
